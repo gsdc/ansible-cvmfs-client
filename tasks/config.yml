@@ -9,6 +9,13 @@
     mode: "0644"
   notify: "config reload"
 
+- name: Switch sss and files for nsswitch.conf due to direct map error
+  ansible.builtin.replace:
+    path: /etc/nsswitch.conf
+    regex: "automount:  sss files"
+    replace: "automount:  files sss"
+  when: "{{ ansible_domain }} == sdfarm.kr" 
+
 - name: Set autofs timeout
   ansible.builtin.lineinfile:
     path: /etc/autofs.conf
